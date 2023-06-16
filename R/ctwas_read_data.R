@@ -311,7 +311,7 @@ read_weight_fusion <- function (weight, chrom, ld_snpinfo, z_snp = NULL, method 
 
 read_weight_predictdb <- function (weight, chrom, ld_snpinfo, z_snp = NULL, harmonize_wgt = T, 
                                    recover_strand_ambig=T, ld_pgenfs=NULL, ld_Rinfo=NULL,
-                                   scale_by_ld_variance=T, ncore=1){
+                                   scale_by_ld_variance=T, ncore=1, db_id="rsid"){
   exprlist <- list()
   qclist <- list()
   weights <- weight
@@ -381,11 +381,12 @@ read_weight_predictdb <- function (weight, chrom, ld_snpinfo, z_snp = NULL, harm
         wgt <- query("select * from weights where gene = ?", params = list(gname))
         wgt.matrix <- as.matrix(wgt[, "weight", drop = F])
         
-        rownames(wgt.matrix) <- wgt$rsid
+	
+        rownames(wgt.matrix) <- wgt[[db_id]]
         chrpos <- do.call(rbind, strsplit(wgt$varID, "_"))
         
         
-        snps <- data.frame(gsub("chr", "", chrpos[, 1]), wgt$rsid,
+        snps <- data.frame(gsub("chr", "", chrpos[, 1]), wgt[[db_id]],
                            "0", chrpos[, 2], wgt$eff_allele, wgt$ref_allele,
                            stringsAsFactors = F)
         colnames(snps) <- c("chrom", "id", "cm", "pos", "alt", "ref")
