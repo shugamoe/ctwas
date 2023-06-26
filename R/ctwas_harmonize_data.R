@@ -52,6 +52,8 @@ harmonize_z_ld <- function(z_snp, ld_snpinfo, strand_ambig_action = c("drop", "n
     flip.idx <- z.idx[ifflip]
     z_snp[flip.idx, c("A1", "A2")] <- z_snp[flip.idx, c("A2", "A1")]
     z_snp[flip.idx, "z"] <- -z_snp[flip.idx, "z"]
+    num_regions_skipped <- 0
+    region_skip_log <- data.frame(chrom=sort(unique(ld_Rinfo[["chrom"]])), regions_skipped=rep(0,22))
     if (strand_ambig_action=="recover" & any(ifremove)){
       #compare sign of imputed z score with observed z score for strand ambiguous variants 
       #following imputation strategy in https://dx.doi.org/10.1093%2Fbioinformatics%2Fbtu416
@@ -70,6 +72,7 @@ harmonize_z_ld <- function(z_snp, ld_snpinfo, strand_ambig_action = c("drop", "n
           #skip region if there are no ambiguous variants
           if (length(z.idx.ambig)>0){
             R_snp <- readRDS(ld_Rinfo$RDS_file[i])
+
             #z scores for unambiguous and ambiguous variants in current region
             z_t <- z_snp$z[z.idx.unambig]
             z_i_obs <- z_snp$z[z.idx.ambig]
@@ -86,7 +89,10 @@ harmonize_z_ld <- function(z_snp, ld_snpinfo, strand_ambig_action = c("drop", "n
             #NOTE: consider replacing this with a test of significance - see "Fine-mapping from summary data with the Sum of Single Effects model" - Yuxin
             if_sign_neq <- sign(z_i_obs) != sign(z_i)
             z_snp[z.idx.ambig[if_sign_neq], "z"] <- -z_snp[z.idx.ambig[if_sign_neq], "z"]
-          }
+          } else {
+            num_regions_skipped <- num-regions_skipped + 1
+	    region_skip_log[ld_Rinfo$chrom[i], 2] <- region_skip_log[ld_Rinfo$chrom[i], 2] + 1
+	  }
         }
       } else {
         #TO-DO: mirror previous section but compute R for each region using X
@@ -96,7 +102,8 @@ harmonize_z_ld <- function(z_snp, ld_snpinfo, strand_ambig_action = c("drop", "n
       z_snp <- z_snp[-remove.idx, , drop = F]
     }
   }
-  loginfo("Harmonizing strand-ambiguous z scores using imputation by region")
+  loginfo("Number of regions skipped by chromosome:")
+  loginfo(region_skip_log)
   return(z_snp)
 }
 
