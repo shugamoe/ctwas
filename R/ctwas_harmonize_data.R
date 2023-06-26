@@ -58,7 +58,6 @@ harmonize_z_ld <- function(z_snp, ld_snpinfo, strand_ambig_action = c("drop", "n
       if (is.null(ld_pgenfs)){
         loginfo("Harmonizing strand-ambiguous z scores using imputation by region")
         for (i in 1:nrow(ld_Rinfo)){
-          R_snp <- readRDS(ld_Rinfo$RDS_file[i])
           R_snp_anno <- read_ld_Rvar_RDS(ld_Rinfo$RDS_file[i])
           
           #indicator if z.idx (on chromsome, in LD ref) is in current region
@@ -70,6 +69,7 @@ harmonize_z_ld <- function(z_snp, ld_snpinfo, strand_ambig_action = c("drop", "n
           
           #skip region if there are no ambiguous variants
           if (length(z.idx.ambig)>0){
+            R_snp <- readRDS(ld_Rinfo$RDS_file[i])
             #z scores for unambiguous and ambiguous variants in current region
             z_t <- z_snp$z[z.idx.unambig]
             z_i_obs <- z_snp$z[z.idx.ambig]
@@ -96,6 +96,7 @@ harmonize_z_ld <- function(z_snp, ld_snpinfo, strand_ambig_action = c("drop", "n
       z_snp <- z_snp[-remove.idx, , drop = F]
     }
   }
+  loginfo("Harmonizing strand-ambiguous z scores using imputation by region")
   return(z_snp)
 }
 
