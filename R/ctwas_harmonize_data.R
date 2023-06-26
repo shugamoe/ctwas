@@ -52,7 +52,6 @@ harmonize_z_ld <- function(z_snp, ld_snpinfo, strand_ambig_action = c("drop", "n
     flip.idx <- z.idx[ifflip]
     z_snp[flip.idx, c("A1", "A2")] <- z_snp[flip.idx, c("A2", "A1")]
     z_snp[flip.idx, "z"] <- -z_snp[flip.idx, "z"]
-    num_regions_skipped <- 0
     region_skip_log <- data.frame(chrom=sort(unique(ld_Rinfo[["chrom"]])), regions_skipped=rep(0,22))
     if (strand_ambig_action=="recover" & any(ifremove)){
       #compare sign of imputed z score with observed z score for strand ambiguous variants 
@@ -90,7 +89,6 @@ harmonize_z_ld <- function(z_snp, ld_snpinfo, strand_ambig_action = c("drop", "n
             if_sign_neq <- sign(z_i_obs) != sign(z_i)
             z_snp[z.idx.ambig[if_sign_neq], "z"] <- -z_snp[z.idx.ambig[if_sign_neq], "z"]
           } else {
-            num_regions_skipped <- num-regions_skipped + 1
 	    region_skip_log[ld_Rinfo$chrom[i], 2] <- region_skip_log[ld_Rinfo$chrom[i], 2] + 1
 	  }
         }
