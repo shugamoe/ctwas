@@ -115,7 +115,7 @@ harmonize_z_ld <- function(z_snp, ld_snpinfo, strand_ambig_action = c("drop", "n
 #'
 #' @export
 harmonize_wgt_ld <- function (wgt.matrix, snps, ld_snpinfo, recover_strand_ambig=T, 
-                              ld_pgenfs=NULL, ld_Rinfo=NULL, R_wgt=NULL, wgt=NULL){
+                              ld_pgenfs=NULL, ld_Rinfo=NULL, R_wgt=NULL, wgt=NULL, wgt_keep_ambig=F){
   colnames(snps) <- c("chrom", "id", "cm", "pos", "alt", "ref")
   snps <- snps[match(rownames(wgt.matrix), snps$id), ]
   snpnames <- intersect(snps$id, ld_snpinfo$id)
@@ -194,9 +194,11 @@ harmonize_wgt_ld <- function (wgt.matrix, snps, ld_snpinfo, recover_strand_ambig
       #take no action if single variant. wrote this as separate if-statement for clarity, but it could be rolled into the following if-statement
     } else if (any(ifremove)){
       #if recover_strand_ambig=F, or >2 ambiguous variants and 0 unambiguous variants, discard the ambiguous variants
-      remove.idx <- snps.idx[ifremove]
-      snps <- snps[-remove.idx, , drop = F]
-      wgt.matrix <- wgt.matrix[-remove.idx, , drop = F]
+      if (!wgt_keep_ambig){ # Only remove ambiguous variants if we didn't decide to keep them in (i.e. we trust the predict.db weights).
+        remove.idx <- snps.idx[ifremove]
+        snps <- snps[-remove.idx, , drop = F]
+        wgt.matrix <- wgt.matrix[-remove.idx, , drop = F]
+      }
     }
   }
   return(list(wgt = wgt.matrix, snps = snps))

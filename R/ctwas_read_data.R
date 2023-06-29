@@ -311,7 +311,7 @@ read_weight_fusion <- function (weight, chrom, ld_snpinfo, z_snp = NULL, method 
 
 read_weight_predictdb <- function (weight, chrom, ld_snpinfo, z_snp = NULL, harmonize_wgt = T, 
                                    recover_strand_ambig=T, ld_pgenfs=NULL, ld_Rinfo=NULL,
-                                   scale_by_ld_variance=T, ncore=1, db_id="rsid"){
+                                   scale_by_ld_variance=T, ncore=1, db_id="rsid", wgt_keep_ambig=F){
   exprlist <- list()
   qclist <- list()
   weights <- weight
@@ -417,7 +417,7 @@ read_weight_predictdb <- function (weight, chrom, ld_snpinfo, z_snp = NULL, harm
           }
           w <- harmonize_wgt_ld(wgt.matrix, snps, ld_snpinfo,
                                 recover_strand_ambig=recover_strand_ambig,
-                                ld_Rinfo=ld_Rinfo, R_wgt=R_wgt, wgt=wgt)
+                                ld_Rinfo=ld_Rinfo, R_wgt=R_wgt, wgt=wgt, wgt_keep_ambig=wgt_keep_ambig)
           wgt.matrix <- w[["wgt"]]
           snps <- w[["snps"]]
         }
