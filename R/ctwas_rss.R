@@ -208,7 +208,7 @@ ctwas_rss <- function(
     regionlist2 <- filter_regions(regionlist,
                                   group_prior,
                                   prob_single,
-                                  zdf)
+                                  zdf, chrom = chrom)
 
     loginfo("Blocks are filtered: %s blocks left",
             sum(unlist(lapply(regionlist2, length))))
