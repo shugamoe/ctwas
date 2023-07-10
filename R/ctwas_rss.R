@@ -94,7 +94,8 @@ ctwas_rss <- function(
   outname = NULL,
   logfile = NULL,
   merge = TRUE,
-  fine_map = T){
+  fine_map = T,
+  chrom=1:22){
 
   if (!is.null(logfile)){
     addHandler(writeToFile, file= logfile, level='DEBUG')
@@ -158,7 +159,8 @@ ctwas_rss <- function(
                               outname = outname,
                               outputdir = outputdir,
                               merge = merge,
-                              ncore = ncore_LDR) # susie_rss can't take 1 var.
+                              ncore = ncore_LDR,
+                              chrom = chrom) # susie_rss can't take 1 var.
   
   saveRDS(regionlist, file=paste0(outputdir, "/", outname, ".regionlist.RDS"))
   

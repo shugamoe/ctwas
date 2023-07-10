@@ -44,6 +44,7 @@ index_regions <- function(regionfile,
                           outname = NULL,
                           outputdir = getwd(),
                           ncore = 1,
+			  chrom = 1:22,
                           reuse_R_gene = F) {
 
   if (is.null(pvarfs) & is.null(ld_Rfs)){
@@ -235,7 +236,7 @@ index_regions <- function(regionfile,
     
     regionlist_all <- list()
     
-    for (b in 1:22){
+    for (b in chrom){
       regionlist_all[[b]] <- cbind(b, names(regionlist[[b]]))
     }
     
