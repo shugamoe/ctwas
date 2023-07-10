@@ -284,7 +284,7 @@ ctwas_rss <- function(
       
       # filter out regions based on max gene PIP of the region
       res.keep <- NULL
-      for (b in 1: length(regionlist)){
+      for (b in chrom){
         for (rn in names(regionlist[[b]])){
           gene_PIP <- max(res$susie_pip[res$type != "SNP" & res$region_tag1 == b & res$region_tag2 == rn], 0)
           if (gene_PIP < rerun_gene_PIP) {
