@@ -102,9 +102,9 @@ ctwas_rss <- function(
 
   loginfo('ctwas started ... ')
 
-  if (length(ld_exprfs) != 22){
-    stop("Not all imputed expression files for 22 chromosomes are provided.")
-  }
+  # if (length(ld_exprfs) != 22){
+  #   stop("Not all imputed expression files for 22 chromosomes are provided.")
+  # }
   ld_exprvarfs <- sapply(ld_exprfs, prep_exprvar)
 
   if (is.null(ld_pgenfs) & is.null(ld_R_dir)){
