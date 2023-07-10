@@ -229,7 +229,7 @@ index_regions <- function(regionfile,
     
     dir.create(file.path(outputdir, paste0(outname, "_LDR")), showWarnings = F)
     
-    wgtall <- lapply(exprvarfs, function(x){load(paste0(strsplit(x, ".exprvar")[[1]], ".exprqc.Rd")); wgtlist})
+    wgtall <- lapply(exprvarfs[chrom], function(x){load(paste0(strsplit(x, ".exprvar")[[1]], ".exprqc.Rd")); wgtlist})
     wgtlistall <- do.call(c, wgtall)
     names(wgtlistall) <- do.call(c, lapply(wgtall, names))
     rm(wgtall)
