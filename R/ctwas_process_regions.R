@@ -367,6 +367,7 @@ index_regions <- function(regionfile,
 #' filter regions based on probability of at most 1 causal effect
 filter_regions <- function(regionlist, group_prior, prob_single = 0.8, zdf, chrom=1:22){
   regionlist2 <- regionlist
+  browser()
   for (b in chrom){
     for (rn in names(regionlist[[b]])) {
       gid <- regionlist[[b]][[rn]][["gid"]]
