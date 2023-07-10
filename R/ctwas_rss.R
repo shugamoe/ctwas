@@ -276,7 +276,9 @@ ctwas_rss <- function(
                                   outname = outname, outputdir = outputdir,
                                   merge = merge,
                                   ncore = ncore_LDR,
-                                  reuse_R_gene = T) # susie_rss can't take 1 var.
+				  chrom = chrom,
+                                  reuse_R_gene = T
+                                  ) # susie_rss can't take 1 var.
       
       res <- data.table::fread(paste0(file.path(outputdir, outname), ".temp.susieIrss.txt"))
       

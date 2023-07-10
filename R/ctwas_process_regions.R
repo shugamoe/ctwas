@@ -74,7 +74,7 @@ index_regions <- function(regionfile,
   }
 
   regionlist <- list()
-  for (b in 1:length(exprvarfs)){
+  for (b in chrom){
 
     if (!is.null(pvarfs)){
       # get snp info (from pvarf file)
@@ -86,9 +86,9 @@ index_regions <- function(regionfile,
       snpinfo <- read_ld_Rvar(ld_Rf)
     }
 
-    # if (isTRUE(unique(snpinfo$chrom) != b)){
-    #   stop("Input genotype file not split by chromosome or not in correct order")
-    # }
+    if (isTRUE(unique(snpinfo$chrom) != b)){
+      stop("Input genotype file not split by chromosome or not in correct order")
+    }
 
     # select variant
     snpinfo$keep <- rep(1, nrow(snpinfo))
@@ -197,7 +197,7 @@ index_regions <- function(regionfile,
 
   if ("z" %in% colnames(select)) {
     # z score is given, trim snps with lower |z|
-    for (b in 1: length(regionlist)){
+    for (b in chrom){
       for (rn in names(regionlist[[b]])) {
         if (length(regionlist[[b]][[rn]][["sid"]]) > maxSNP){
           idx <- match(regionlist[[b]][[rn]][["sid"]], select[, "id"])
@@ -210,7 +210,7 @@ index_regions <- function(regionfile,
     }
   } else{
     # if no z score information, randomly select snps
-    for (b in 1: length(regionlist)){
+    for (b in chrom){
       for (rn in names(regionlist[[b]])) {
         if (length(regionlist[[b]][[rn]][["sid"]]) > maxSNP){
           n.ori <- length(regionlist[[b]][[rn]][["sid"]])
@@ -367,7 +367,7 @@ index_regions <- function(regionfile,
 #' filter regions based on probability of at most 1 causal effect
 filter_regions <- function(regionlist, group_prior, prob_single = 0.8, zdf){
   regionlist2 <- regionlist
-  for (b in 1: length(regionlist)){
+  for (b in chrom){
     for (rn in names(regionlist[[b]])) {
       gid <- regionlist[[b]][[rn]][["gid"]]
       sid <- regionlist[[b]][[rn]][["sid"]]
@@ -394,7 +394,7 @@ filter_regions_stable <- function(regionlist, group_prior, prob_single = 0.8){
   prior.SNP <- group_prior[2]
 
   regionlist2 <- regionlist
-  for (b in 1: length(regionlist)){
+  for (b in chrom){
 
     for (rn in names(regionlist[[b]])) {
 
@@ -420,7 +420,7 @@ filter_regions_stable <- function(regionlist, group_prior, prob_single = 0.8){
 #' regionlist need to contain at least 1 non-empty
 region2core <- function(regionlist, ncore = 1){
   dflist <- list()
-  for (b in 1:length(regionlist)){
+  for (b in chrom){
     if (length(regionlist[[b]]) > 0){
       dflist[[b]] <- data.frame("b" = b, "rn"= names(regionlist[[b]]), stringsAsFactors = FALSE)
     }
