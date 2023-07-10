@@ -198,8 +198,8 @@ ctwas_rss <- function(
                        coverage = coverage,
                        ncore = ncore,
                        outputdir = outputdir,
-                       outname = paste0(outname, ".s1")
-                   )
+                       outname = paste0(outname, ".s1"),
+		       chrom = chrom)
 
     group_prior <- pars[["group_prior"]]
     group_prior_var <- pars[["group_prior_var"]]
@@ -232,7 +232,8 @@ ctwas_rss <- function(
                        coverage = coverage,
                        ncore = ncore,
                        outputdir = outputdir,
-                       outname = paste0(outname, ".s2"))
+                       outname = paste0(outname, ".s2"),
+                       chrom = chrom)
 
     group_prior <- pars[["group_prior"]]
     group_prior_var <- pars[["group_prior_var"]]
@@ -258,7 +259,8 @@ ctwas_rss <- function(
                        coverage = coverage,
                        ncore = ncore,
                        outputdir = outputdir,
-                       outname = paste0(outname, ".temp"))
+                       outname = paste0(outname, ".temp"),
+    chrom = chrom)
     
     group_prior["SNP"] <- group_prior["SNP"] * thin # convert snp pi1
     
@@ -322,7 +324,8 @@ ctwas_rss <- function(
                            coverage = coverage,
                            ncore = ncore.rerun,
                            outputdir = outputdir,
-                           outname = paste0(outname, ".s3"))
+                           outname = paste0(outname, ".s3"),
+	                   chrom = chrom)
         
         res.rerun <- data.table::fread(paste0(file.path(outputdir, outname), ".s3.susieIrss.txt"))
         

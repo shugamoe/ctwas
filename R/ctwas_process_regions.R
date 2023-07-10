@@ -418,7 +418,7 @@ filter_regions_stable <- function(regionlist, group_prior, prob_single = 0.8){
 #' @param ncore integer, numeber of cores, at least 1
 #' regions allocated to given number of cores
 #' regionlist need to contain at least 1 non-empty
-region2core <- function(regionlist, ncore = 1){
+region2core <- function(regionlist, ncore = 1, chrom=1:22){
   dflist <- list()
   for (b in chrom){
     if (length(regionlist[[b]]) > 0){

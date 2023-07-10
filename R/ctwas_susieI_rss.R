@@ -20,7 +20,9 @@ susieI_rss <- function(zdf,
                        coverage = 0.95,
                        ncore = 1,
                        outputdir = getwd(),
-                       outname = NULL){
+                       outname = NULL,
+		       chrom = 1:22
+		       ){
 
   outname <- file.path(outputdir, outname)
 
@@ -70,7 +72,7 @@ susieI_rss <- function(zdf,
     cl <- parallel::makeCluster(ncore, outfile = "")
     doParallel::registerDoParallel(cl)
 
-    corelist <- region2core(regionlist, ncore)
+    corelist <- region2core(regionlist, ncore, chrom=chrom)
 
     outdf <- foreach (core = 1:length(corelist), .combine = "rbind",
                       .packages = "ctwas") %dopar% {
@@ -282,7 +284,7 @@ susieI_rss_stable <- function(zdf,
     cl <- parallel::makeCluster(ncore, outfile = "")
     doParallel::registerDoParallel(cl)
     
-    corelist <- region2core(regionlist, ncore)
+    corelist <- region2core(regionlist, ncore, chrom=chrom)
     
     outdf <- foreach (core = 1:length(corelist), .combine = "rbind",
                       .packages = "ctwas") %dopar% {
