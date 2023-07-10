@@ -86,9 +86,9 @@ index_regions <- function(regionfile,
       snpinfo <- read_ld_Rvar(ld_Rf)
     }
 
-    if (isTRUE(unique(snpinfo$chrom) != b)){
-      stop("Input genotype file not split by chromosome or not in correct order")
-    }
+    # if (isTRUE(unique(snpinfo$chrom) != b)){
+    #   stop("Input genotype file not split by chromosome or not in correct order")
+    # }
 
     # select variant
     snpinfo$keep <- rep(1, nrow(snpinfo))
