@@ -16,6 +16,12 @@ anno_susie <- function(susieres,
     colnames(anno.gene) <-  c("chrom", "id", "pos", "type")
   }
 
+  print(head(geneinfo))
+  print(gidx)
+  print(type)
+  print(anno.gene)
+
+
   anno.SNP <- cbind(snpinfo[sidx, c("chrom", "id", "pos")],
                     "SNP")
   colnames(anno.SNP) <-  c("chrom", "id", "pos", "type")
