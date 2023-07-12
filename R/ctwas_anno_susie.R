@@ -17,10 +17,10 @@ anno_susie <- function(susieres,
   }
 
   print(head(geneinfo))
-  print(gidx)
+  print(dim(geneinfo))
+  print(head(gidx))
   print(type)
   print(anno.gene)
-
 
   anno.SNP <- cbind(snpinfo[sidx, c("chrom", "id", "pos")],
                     "SNP")
