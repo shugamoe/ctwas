@@ -381,10 +381,8 @@ read_weight_predictdb <- function (weight, chrom, ld_snpinfo, z_snp = NULL, harm
         wgt <- query("select * from weights where gene = ?", params = list(gname))
         wgt.matrix <- as.matrix(wgt[, "weight", drop = F])
         
-	
         rownames(wgt.matrix) <- wgt[[db_id]]
         chrpos <- do.call(rbind, strsplit(wgt$varID, "_"))
-        
         
         snps <- data.frame(gsub("chr", "", chrpos[, 1]), wgt[[db_id]],
                            "0", chrpos[, 2], wgt$eff_allele, wgt$ref_allele,
@@ -392,7 +390,7 @@ read_weight_predictdb <- function (weight, chrom, ld_snpinfo, z_snp = NULL, harm
         colnames(snps) <- c("chrom", "id", "cm", "pos", "alt", "ref")
         snps$chrom <- as.integer(snps$chrom)
         snps$pos <- as.integer(snps$pos)
-        
+
         if (!any(snps$chrom==chrom)){
           next
         }

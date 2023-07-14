@@ -75,7 +75,6 @@ impute_expr_z <- function (z_snp, weight, ld_pgenfs = NULL, ld_R_dir = NULL, met
         loginfo("ld genotype is given, using genotypes to impute gene z score.")
         ld_pgen <- prep_pgen(ld_pgenf, ld_pvarf)
         gnames <- names(exprlist)
-	browser()
         for (i in 1:length(gnames)) {
           gname <- gnames[i]
           wgt <- exprlist[[gname]][["wgt"]]
