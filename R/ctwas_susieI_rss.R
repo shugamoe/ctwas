@@ -111,9 +111,7 @@ susieI_rss <- function(zdf,
               ld_pgen <- prep_pgen(pgenf = ld_pgenfs[b], ld_pvarfs[b])
 
               X.g <- read_expr(ld_exprfs[b], variantidx = gidx)
-              loginfo("Read %s (core %s)", ld_exprfs[b], core)
               X.s <- read_pgen(ld_pgen, variantidx = sidx)
-              loginfo("Read %s (core %s)", ld_pgen, core)
               X <- cbind(X.g, X.s)
               R <- Rfast::cora(X)
             } else {
@@ -148,7 +146,6 @@ susieI_rss <- function(zdf,
                                   prior_variance = V,
                                   estimate_prior_variance = F,
                                   coverage = coverage)
-            loginfo("Ran susie_rss (core %s)", core)
 
             geneinfo <- read_exprvar(ld_exprvarfs[b])
 
@@ -164,7 +161,6 @@ susieI_rss <- function(zdf,
                                     gidx,
                                     sidx,
                                     b, rn)
-            loginfo("Annotated susie (core %s)", core)
 
             outdf.core.list[[reg]] <- outdf.reg
           }
