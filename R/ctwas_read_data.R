@@ -277,6 +277,7 @@ read_weight_fusion <- function (weight, chrom, ld_snpinfo, z_snp = NULL, method 
           next
         }
       }
+
       # Ensure only top magnitude snp weight in the top1 wgt.matrix column
       if (g.method == "top1"){
         wgt.matrix[,"top1"][-which.max(wgt.matrix[,"top1"]^2)] <- 0
