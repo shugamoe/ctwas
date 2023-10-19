@@ -53,7 +53,9 @@ index_regions <- function(regionfile,
                           outname = NULL,
                           outputdir = getwd(),
                           ncore = 1,
-                          reuse_R_gene = F) {
+                          reuse_R_gene = F,
+			  chrom = 1:22,
+			  ) {
 
   if (is.null(pvarfs) & is.null(ld_Rfs)){
     stop("Stopped: missing LD/genotype information.
@@ -82,7 +84,7 @@ index_regions <- function(regionfile,
   }
 
   regionlist <- list()
-  for (b in 1:length(exprvarfs)){
+  for (b in chrom){
 
     if (!is.null(pvarfs)){
       # get snp info (from pvarf file)
@@ -205,7 +207,7 @@ index_regions <- function(regionfile,
 
   if ("z" %in% colnames(select)) {
     # z score is given, trim snps with lower |z|
-    for (b in 1: length(regionlist)){
+    for (b in chrom){
       for (rn in names(regionlist[[b]])) {
         if (length(regionlist[[b]][[rn]][["sid"]]) > maxSNP){
           idx <- match(regionlist[[b]][[rn]][["sid"]], select[, "id"])
@@ -218,7 +220,7 @@ index_regions <- function(regionfile,
     }
   } else{
     # if no z score information, randomly select snps
-    for (b in 1: length(regionlist)){
+    for (b in chrom){
       for (rn in names(regionlist[[b]])) {
         if (length(regionlist[[b]][[rn]][["sid"]]) > maxSNP){
           n.ori <- length(regionlist[[b]][[rn]][["sid"]])
@@ -237,14 +239,14 @@ index_regions <- function(regionfile,
     
     dir.create(file.path(outputdir, paste0(outname, "_LDR")), showWarnings = F)
     
-    wgtall <- lapply(exprvarfs, function(x){load(paste0(strsplit(x, ".exprvar")[[1]], ".exprqc.Rd")); wgtlist})
+    wgtall <- lapply(exprvarfs[chrom], function(x){load(paste0(strsplit(x, ".exprvar")[[1]], ".exprqc.Rd")); wgtlist})
     wgtlistall <- do.call(c, wgtall)
     names(wgtlistall) <- do.call(c, lapply(wgtall, names))
     rm(wgtall)
     
     regionlist_all <- list()
     
-    for (b in 1:22){
+    for (b in chrom){
       regionlist_all[[b]] <- cbind(b, names(regionlist[[b]]))
     }
     
@@ -372,9 +374,9 @@ index_regions <- function(regionfile,
 
 
 #' filter regions based on probability of at most 1 causal effect
-filter_regions <- function(regionlist, group_prior, prob_single = 0.8, zdf){
+filter_regions <- function(regionlist, group_prior, prob_single = 0.8, zdf, chrom=1:22){
   regionlist2 <- regionlist
-  for (b in 1: length(regionlist)){
+  for (b in chrom){
     for (rn in names(regionlist[[b]])) {
       gid <- regionlist[[b]][[rn]][["gid"]]
       sid <- regionlist[[b]][[rn]][["sid"]]
@@ -399,9 +401,9 @@ filter_regions <- function(regionlist, group_prior, prob_single = 0.8, zdf){
 #' regions allocated to given number of cores
 #' regionlist need to contain at least 1 non-empty
 #' 
-region2core <- function(regionlist, ncore = 1){
+region2core <- function(regionlist, ncore = 1, chrom=1:22){
   dflist <- list()
-  for (b in 1:length(regionlist)){
+  for (b in chrom){
     if (length(regionlist[[b]]) > 0){
       dflist[[b]] <- data.frame("b" = b, "rn"= names(regionlist[[b]]), stringsAsFactors = FALSE)
     }
