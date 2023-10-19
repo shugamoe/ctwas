@@ -54,8 +54,7 @@ index_regions <- function(regionfile,
                           outputdir = getwd(),
                           ncore = 1,
                           reuse_R_gene = F,
-			  chrom = 1:22,
-			  ) {
+			  chrom = 1:22) {
 
   if (is.null(pvarfs) & is.null(ld_Rfs)){
     stop("Stopped: missing LD/genotype information.

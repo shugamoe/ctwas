@@ -151,7 +151,7 @@ ctwas_rss <- function(
   logfile = NULL,
   merge = TRUE,
   fine_map = T,
-  chrom=1:22
+  chrom = 1:22
   ){
 
   if (!is.null(logfile)){
