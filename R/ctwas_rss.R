@@ -159,6 +159,7 @@ ctwas_rss <- function(
   logfile = NULL,
   merge = TRUE,
   fine_map = T,
+  chrom = 1:22,
   reuse_regionlist = F,
   reuse_regionlist_allSNPs = F,
   compress_LDR = F){
@@ -169,9 +170,9 @@ ctwas_rss <- function(
 
   loginfo('ctwas started ... ')
 
-  if (length(ld_exprvarfs) != 22){
-    stop("Not all imputed expression files for 22 chromosomes are provided.")
-  }
+  # if (length(ld_exprvarfs) != 22){
+  #   stop("Not all imputed expression files for 22 chromosomes are provided.")
+  # }
 
   if (is.null(ld_pgenfs) & is.null(ld_R_dir)){
     stop("Error: need to provide either .pgen file or ld_R file")
@@ -186,6 +187,12 @@ ctwas_rss <- function(
     ld_Rfs <- write_ld_Rf(ld_R_dir, outname = outname, outputdir = outputdir)
     ld_snpinfo <- lapply(ld_Rfs, read_ld_Rvar)
     ld_pvarfs <- NULL
+  }
+
+  if (!all(chrom == 1:22)){
+    dummy_ld_exprvarfs <- rep(NA, 22)
+    dummy_ld_exprvarfs[chrom] <- ld_exprvarfs
+    ld_exprvarfs <- dummy_ld_exprvarfs
   }
 
   if (is.null(ld_regions_custom)){
@@ -227,11 +234,12 @@ ctwas_rss <- function(
                               outname = outname,
                               outputdir = outputdir,
                               merge = merge,
+			      chrom = chrom,
                               ncore = ncore_LDR) # susie_rss can't take 1 var.
 
     saveRDS(regionlist, file=paste0(outputdir, "/", outname, ".regionlist.RDS"))
 
-    temp_regs <- lapply(1:22, function(x) cbind(x,
+    temp_regs <- lapply(chrom, function(x) cbind(x,
                                               unlist(lapply(regionlist[[x]], "[[", "start")),
                                               unlist(lapply(regionlist[[x]], "[[", "stop"))))
 
@@ -273,7 +281,8 @@ ctwas_rss <- function(
                        outputdir = outputdir,
                        outname = paste0(outname, ".s1"),
                        inv_gamma_shape=inv_gamma_shape,
-                       inv_gamma_rate=inv_gamma_rate)
+                       inv_gamma_rate=inv_gamma_rate,
+		       chrom=chrom)
 
     group_prior <- pars[["group_prior"]]
     group_prior_var <- pars[["group_prior_var"]]
@@ -282,7 +291,8 @@ ctwas_rss <- function(
     regionlist2 <- filter_regions(regionlist,
                                   group_prior,
                                   prob_single,
-                                  zdf)
+                                  zdf,
+				  chrom=chrom)
 
     loginfo("Blocks are filtered: %s blocks left",
             sum(unlist(lapply(regionlist2, length))))
@@ -339,7 +349,8 @@ ctwas_rss <- function(
                        outname = paste0(outname, ".temp"),
                        inv_gamma_shape=inv_gamma_shape,
                        inv_gamma_rate=inv_gamma_rate,
-                       report_parameters=F)
+                       report_parameters=F,
+		       chrom=chrom)
 
     group_prior["SNP"] <- group_prior["SNP"] * thin # convert snp pi1
 
@@ -377,7 +388,7 @@ ctwas_rss <- function(
       res <- data.table::fread(paste0(file.path(outputdir, outname), ".temp.susieIrss.txt"))
       # filter out regions based on max gene PIP of the region
       res.keep <- NULL
-      for (b in 1: length(regionlist)){
+      for (b in chrom){
         for (rn in names(regionlist[[b]])){
           #gene_PIP <- max(res$susie_pip[res$type != "SNP" & res$region_tag1 == b & res$region_tag2 == rn], 0)
           gene_PIP <- sum(res$susie_pip[res$type != "SNP" & res$region_tag1 == b & res$region_tag2 == rn])
@@ -420,7 +431,8 @@ ctwas_rss <- function(
                            outname = paste0(outname, ".s3"),
                            inv_gamma_shape=inv_gamma_shape,
                            inv_gamma_rate=inv_gamma_rate,
-                           report_parameters=F)
+                           report_parameters=F,
+			   chrom=chrom)
 
         res.rerun <- data.table::fread(paste0(file.path(outputdir, outname), ".s3.susieIrss.txt"))
 
