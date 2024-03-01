@@ -161,7 +161,7 @@ susieI_rss <- function(zdf,
     corelist <- region2core(regionlist, ncore, chrom=chrom)
 
     outdf <- foreach (core = 1:length(corelist), .combine = "rbind",
-                      .packages = "ctwas") %dopar% {
+                      .packages = c("ctwas", "data.table")) %dopar% {
           outdf.core.list <- list()
 
           # run susie for each region
@@ -316,7 +316,7 @@ susieI_rss <- function(zdf,
 
     save(group_prior_rec, group_prior_var_rec,
          file = paste0(outname, ".susieIrssres.Rd"))
-    data.table::fwrite(outdf, file= paste0(outname, ".susieIrss.txt"),
+    fwrite(outdf, file= paste0(outname, ".susieIrss.txt"),
                        sep="\t", quote = F)
 
     parallel::stopCluster(cl)
