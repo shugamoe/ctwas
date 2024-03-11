@@ -107,11 +107,12 @@ susieI_rss <- function(zdf,
   outname <- file.path(outputdir, outname)
 
   group_prior_var_structure <- match.arg(group_prior_var_structure)
-  if (!all(chrom == 1:22)){ # Try to have either all 22 or 1 chrom at a time
-    dummy_ld_exprvarfs <- rep(NA, 22)
-    dummy_ld_exprvarfs[chrom] <- ld_exprvarfs
-    ld_exprvarfs <- dummy_ld_exprvarfs
-  }
+
+  # if (!all(chrom == 1:22)){ # Try to have either all 22 or 1 chrom at a time
+  #   dummy_ld_exprvarfs <- rep(NA, 22)
+  #   dummy_ld_exprvarfs[chrom] <- ld_exprvarfs
+  #   ld_exprvarfs <- dummy_ld_exprvarfs
+  # }
 
   if (is.null(ld_pgenfs) & is.null(ld_Rfs)){
     stop("Error: need to provide either .pgen file or ld_R file")
