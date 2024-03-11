@@ -319,7 +319,8 @@ ctwas_rss <- function(
                        outputdir = outputdir,
                        outname = paste0(outname, ".s2"),
                        inv_gamma_shape=inv_gamma_shape,
-                       inv_gamma_rate=inv_gamma_rate)
+                       inv_gamma_rate=inv_gamma_rate,
+		       chrom=chrom)
 
     group_prior <- pars[["group_prior"]]
     group_prior_var <- pars[["group_prior_var"]]
