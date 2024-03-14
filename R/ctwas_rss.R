@@ -369,6 +369,7 @@ ctwas_rss <- function(
                                   thin = 1, maxSNP = max_snp_region, minvar = 2,
                                   outname = paste0(outname,"_allSNPs"), outputdir = outputdir,
                                   merge = merge,
+				  chrom = chrom,
                                   ncore = ncore_LDR,
                                   reuse_R_gene = T) # susie_rss can't take 1 var.
 
